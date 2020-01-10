@@ -1,7 +1,7 @@
 Summary: A PPP over Ethernet client (for xDSL support)
 Name: rp-pppoe
 Version: 3.10
-Release: 8%{?dist}
+Release: 10%{?dist}
 License: GPLv2+
 Group: System Environment/Daemons
 Url: http://www.roaringpenguin.com/pppoe/
@@ -78,6 +78,10 @@ rm -rf %{buildroot}/etc/ppp/pppoe.conf \
        %{buildroot}/etc/rc.d/init.d/pppoe \
        %{buildroot}/usr/doc \
        %{buildroot}%{_sysconfdir}/ppp/plugins
+
+# correct permissions
+chmod 644 scripts/pppoe-status
+chmod 755 %{buildroot}%{_sysconfdir}/ppp/firewall*
 
 %clean
 rm -rf %{buildroot}
@@ -158,19 +162,24 @@ popd
 exit 0
 
 %files
-%defattr(644,root,root,755)
+%defattr(-,root,root)
 %doc doc/LICENSE scripts/pppoe-connect scripts/pppoe-setup scripts/pppoe-init
 %doc scripts/pppoe-start scripts/pppoe-status scripts/pppoe-stop
 %doc configs
 %config(noreplace) %{_sysconfdir}/ppp/pppoe-server-options
 %{_mandir}/man?/*
-%defattr(755,root,root,755)
 %{_sysconfdir}/ppp/firewall*
 %{_sysconfdir}/rc.d/init.d/*
 /sbin/*
 %{_sbindir}/*
 
 %changelog
+* Thu Jun 13 2013 Than Ngo <than@redhat.com> - 3.10-10
+- fix file permission
+
+* Wed Jun 12 2013 Than Ngo <than@redhat.com> - 3.10-9
+- Resolves: bz#841190, pppoe-server enabled by default
+
 * Tue Jun 29 2010 Than Ngo <than@redhat.com> - 3.10-8
 - Resolves: bz#596206, rebuid with -fno-strict-aliasing
 

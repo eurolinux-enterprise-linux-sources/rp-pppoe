@@ -2,7 +2,7 @@
 #
 # pppoe-server: Starts the PPPoE Server.
 #
-# chkconfig: 2345 10 92
+# chkconfig: - 10 92
 # description:  pppoe-server is a user-space server for PPPoE (Point-to-Point Protocol over Eth- \
 #               ernet) for Linux and other UNIX systems.  pppoe-server works in concert with the \
 #               pppoe client to respond to PPPoE discovery packets and set up PPPoE sessions.
