@@ -1,7 +1,7 @@
 Summary: A PPP over Ethernet client (for xDSL support)
 Name: rp-pppoe
 Version: 3.10
-Release: 10%{?dist}
+Release: 11%{?dist}
 License: GPLv2+
 Group: System Environment/Daemons
 Url: http://www.roaringpenguin.com/pppoe/
@@ -72,6 +72,7 @@ pushd %{buildroot}%{_sbindir}
 ln -s ../../sbin/* .
 ln -s ../../sbin/pppoe-stop adsl-stop
 ln -s ../../sbin/pppoe-start adsl-start
+ln -s ../../sbin/pppoe-setup adsl-setup
 popd
 
 rm -rf %{buildroot}/etc/ppp/pppoe.conf \
@@ -174,6 +175,9 @@ exit 0
 %{_sbindir}/*
 
 %changelog
+* Fri Apr 11 2014 Than Ngo <than@redhat.com> - 3.10-11
+- Resolves: bz#1009268, add symlink adsl-setup
+
 * Thu Jun 13 2013 Than Ngo <than@redhat.com> - 3.10-10
 - fix file permission
 
