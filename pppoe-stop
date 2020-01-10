@@ -139,4 +139,5 @@ if [ -s /etc/default-routes ] ; then
     rm -f /etc/default-routes
 fi
 
+[ -x /etc/ppp/ip-down.local ] && /etc/ppp/ip-down.local > /dev/null 2>&1
 exit 0

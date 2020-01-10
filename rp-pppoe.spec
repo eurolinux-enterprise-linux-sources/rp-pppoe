@@ -1,7 +1,7 @@
 Summary: A PPP over Ethernet client (for xDSL support)
 Name: rp-pppoe
 Version: 3.10
-Release: 11%{?dist}
+Release: 16%{?dist}
 License: GPLv2+
 Group: System Environment/Daemons
 Url: http://www.roaringpenguin.com/pppoe/
@@ -15,6 +15,10 @@ Source5: pppoe-stop
 Source6: pppoe-server.init
 
 Patch0: rp-pppoe-3.8-redhat.patch
+# enable rp-pppoe plugin
+Patch1: rp-pppoe-3.10-plugin.patch
+# fix build issue with kernel (without pppoe support)
+Patch2: rp-pppoe-3.10-build.patch
 
 Buildroot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
@@ -29,7 +33,7 @@ BuildRequires: libtool
 BuildRequires: autoconf
 BuildRequires: automake
 BuildRequires: coreutils
-BuildRequires: ppp
+BuildRequires: ppp ppp-devel
 
 ExcludeArch: s390 s390x
 
@@ -44,11 +48,14 @@ the official PPPoE specification.
 %setup -q
 
 %patch0 -p1 -b .config
+%patch1 -p1 -b .plugin
+%patch2 -p1 -b .build
 
 %build
 cd src
 autoconf
-CFLAGS="$RPM_OPT_FLAGS -D_GNU_SOURCE -fno-strict-aliasing" %configure
+export CFLAGS="%{optflags} -D_GNU_SOURCE -fno-strict-aliasing"
+%configure --enable-plugin
 make
 
 %install
@@ -175,6 +182,21 @@ exit 0
 %{_sbindir}/*
 
 %changelog
+* Mon Feb 29 2016 Than Ngo <than@redhat.com> - 3.10-16
+- add missing BR on ppp-devel
+
+* Fri Feb 12 2016 Than Ngo <than@redhat.com> - 3.10-15
+- Resolves: bz#1182080, disable it again
+
+* Wed Jan 27 2016 Than Ngo <than@redhat.com> - 3.10-14
+- Resolves: bz#841194, enable rp-pppoe plugin
+
+* Fri Nov 27 2015 Than Ngo <than@redhat.com> - 3.10-13
+- Resolves: bz#746579, handle default route and ip-down.local correctly
+
+* Fri Nov 20 2015 Than Ngo <than@redhat.com> - 3.10-12
+- Resolves: bz#1182080, build rp-pppoe also for s390 and s390x
+
 * Fri Apr 11 2014 Than Ngo <than@redhat.com> - 3.10-11
 - Resolves: bz#1009268, add symlink adsl-setup
 

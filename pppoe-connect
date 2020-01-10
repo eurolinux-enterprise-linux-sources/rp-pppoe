@@ -275,6 +275,7 @@ if test "`basename \"$LINUX_PLUGIN\"`" = "pppoatm.so" ; then
     PLUGIN_OPTS="$PLUGIN_OPTS $VPI.$VCI"
     modprobe pppoatm > /dev/null 2>&1
 fi
+DEFROUTE=$DEFAULTROUTE
 if test "$DEFROUTE" != "no" ; then
     DEFAULTROUTE="defaultroute"
     # pppd will no longer delete an existing default route
@@ -285,7 +286,7 @@ if test "$DEFROUTE" != "no" ; then
         ip route del $spec;
     done
 else
-    DEFAULTROUTE=""
+    DEFAULTROUTE="nodefaultroute"
 fi
 
 # Standard PPP options we always use
